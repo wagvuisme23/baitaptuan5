@@ -5,7 +5,6 @@ import com.example.baitap.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,12 +13,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -29,7 +28,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @Value("${product.images.directory}")
+    @Value("${product.images.directory:productImages}")
     private String productImagesDirectory;
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
@@ -62,6 +61,17 @@ public class ProductController {
         return "redirect:/products";
     }
 
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable int id, Model model) {
+        Product product = productService.get(id);
+        if (product == null) {
+            // Handle product not found, possibly redirect to error page
+            return "redirect:/products";
+        }
+        model.addAttribute("product", product);
+        return "products/edit";
+    }
+
     @PostMapping("/edit")
     public String edit(@Valid Product editProduct,
                        @RequestParam MultipartFile imageProduct,
@@ -84,6 +94,7 @@ public class ProductController {
         return "redirect:/products";
     }
 
+
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable int id) {
         productService.delete(id);
@@ -93,6 +104,13 @@ public class ProductController {
     @GetMapping("")
     public String index(Model model) {
         model.addAttribute("listproduct", productService.getAll());
+        return "products/index";
+    }
+
+    @GetMapping("/search")
+    public String search(@RequestParam String keyword, Model model) {
+        List<Product> searchResults = productService.searchByName(keyword);
+        model.addAttribute("listproduct", searchResults);
         return "products/index";
     }
 
@@ -124,4 +142,5 @@ public class ProductController {
             return null;
         }
     }
+
 }

@@ -26,7 +26,8 @@
             <th scope="row" th:text="${product.id}">1</th>
             <td th:text="${product.name}">Product Name</td>
             <td>
-                <img th:src="@{'/productImages/' + ${product.image}}" alt="Product image" width="150" height="120">
+                <img th:src="@{/productImages/{image}(image=${product.image})}" alt="Product image"
+                     style="width: 120px">
             </td>
             <td th:text="${product.price}">1000</td>
             <td>

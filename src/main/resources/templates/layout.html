@@ -55,7 +55,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/products/add">Add Product</a>
+                    <a class="nav-link active" aria-current="page" href="/products/create">Add Product</a>
                 </li>
                 <!--<li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/categories">Add Category</a>
@@ -63,13 +63,11 @@
             </ul>
             <!-- Thanh tìm kiếm -->
             <form class="d-flex" th:action="@{/products/search}" method="get">
-                <input class="form-control me-2" type="search" placeholder="Search product..." aria-label="Search" name="keyword">
-                <!--<select class="form-select me-2" name="category">
-                    <option value="">All Categories</option>
-                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-                </select>-->
+                <input class="form-control me-2" type="search" placeholder="Search product..." aria-label="Search"
+                       name="keyword">
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
+
         </div>
     </div>
 </nav>
